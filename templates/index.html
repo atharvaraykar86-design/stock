@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FinSight AI — Multi-Market Prediction Platform</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body data-theme="dark">
+
+<!-- =========================================================
+     PAGE 1 — LOGIN
+========================================================= -->
+<div id="loginPage" class="page active">
+  <div class="login-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <canvas id="loginParticles" class="particles-canvas"></canvas>
+    <div class="grid-lines"></div>
+  </div>
+
+  <div class="login-card glass-card">
+    <div class="login-logo">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+          <path d="M4 28L10 18L16 22L22 10L28 14L32 6" stroke="url(#lg1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs><linearGradient id="lg1" x1="4" y1="28" x2="32" y2="6" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00f5a0"/>
+            <stop offset="100%" stop-color="#00d9f5"/>
+          </linearGradient></defs>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">FinSight</span>
+        <span class="logo-tag">AI PLATFORM</span>
+      </div>
+    </div>
+
+    <h2 class="login-title" data-i18n="welcome">Welcome back</h2>
+    <p class="login-sub" data-i18n="loginSub">Sign in to access your AI prediction dashboard</p>
+
+    <button id="googleLoginBtn" class="btn-google" type="button">
+      <svg width="18" height="18" viewBox="0 0 48 48">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      <span data-i18n="continueGoogle">Continue with Google</span>
+    </button>
+
+    <div class="divider"><span data-i18n="orSignIn">or sign in with email</span></div>
+
+    <div class="input-wrap">
+      <label for="loginEmail"><i class="fa fa-envelope"></i> <span data-i18n="emailLabel">Email address</span></label>
+      <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="input-wrap">
+      <label for="loginPassword"><i class="fa fa-lock"></i> <span data-i18n="passwordLabel">Password</span></label>
+      <div style="position:relative">
+        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+        <span class="toggle-pw" id="togglePw"><i class="fa fa-eye"></i></span>
+      </div>
+    </div>
+
+    <div id="loginError" class="login-error" style="display:none"></div>
+
+    <button id="emailLoginBtn" class="btn-primary" type="button">
+      <i class="fa fa-sign-in-alt"></i> <span data-i18n="signIn">Sign In</span>
+    </button>
+    <button id="emailRegisterBtn" class="btn-secondary" type="button">
+      <i class="fa fa-user-plus"></i> <span data-i18n="createAccount">Create Account</span>
+    </button>
+
+    <p class="login-footer-text" data-i18n="terms">By signing in you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p>
+  </div>
+</div>
+
+
+<!-- =========================================================
+     PAGE 2 — HOME (market selection)
+========================================================= -->
+<div id="homePage" class="page">
+
+  <nav class="home-nav glass-nav">
+    <div class="nav-logo">
+      <div class="logo-icon small">
+        <svg width="20" height="20" viewBox="0 0 36 36" fill="none">
+          <path d="M4 28L10 18L16 22L22 10L28 14L32 6" stroke="url(#lg2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs><linearGradient id="lg2" x1="4" y1="28" x2="32" y2="6" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00f5a0"/>
+            <stop offset="100%" stop-color="#00d9f5"/>
+          </linearGradient></defs>
+        </svg>
+      </div>
+      <span class="nav-brand">FinSight <b>AI</b></span>
+    </div>
+    <div class="nav-right">
+      <!-- PROBLEM 3 FIX: Credits display — shows Unlimited for paid plans -->
+      <div class="credits-badge" id="homeCreditsDisplay" title="Your prediction credits">
+        <i class="fa fa-bolt"></i>
+        <span id="homeCreditsCount">3000</span>
+        <span class="credits-label" data-i18n="credits">credits</span>
+      </div>
+      <!-- Plan badge -->
+      <div class="plan-badge" id="homePlanBadge">FREE</div>
+      <button id="subscribeNavBtn" class="btn-subscribe-nav" type="button">
+        <i class="fa fa-crown"></i> <span data-i18n="upgrade">Upgrade</span>
+      </button>
+      <!-- PROBLEM 1 FIX: Language selector — only EN, Hindi, Marathi -->
+      <select id="homeLangSelector" class="nav-select">
+        <option value="en">🌐 EN</option>
+        <option value="hi">हिंदी</option>
+        <option value="mr">मराठी</option>
+      </select>
+      <button id="homeThemeToggle" class="nav-icon-btn" type="button"><i class="fa fa-moon"></i></button>
+      <div class="user-avatar" id="userAvatar">U</div>
+      <button id="logoutBtn" class="btn-logout" type="button" data-i18n="signOut">Sign Out</button>
+    </div>
+  </nav>
+
+  <!-- PROBLEM 7 FIX: Live Ticker with real data & color blink -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <div class="ticker-inner" id="homeTicker">
+        <span class="ticker-item up"><i class="fa fa-bitcoin"></i> BTC $67,240 ▲2.1%</span>
+        <span class="ticker-item up">NIFTY 24,560 ▲0.8%</span>
+        <span class="ticker-item down">EUR/USD 1.0821 ▼0.3%</span>
+        <span class="ticker-item up">GOLD $2,312 ▲0.5%</span>
+        <span class="ticker-item up">AAPL $192.5 ▲1.2%</span>
+        <span class="ticker-item down">ETH $3,240 ▼0.7%</span>
+        <span class="ticker-item up">SENSEX 80,120 ▲0.6%</span>
+        <span class="ticker-item down">SILVER $27.4 ▼0.2%</span>
+        <span class="ticker-item up">BTC $67,240 ▲2.1%</span>
+        <span class="ticker-item up">NIFTY 24,560 ▲0.8%</span>
+        <span class="ticker-item down">EUR/USD 1.0821 ▼0.3%</span>
+        <span class="ticker-item up">GOLD $2,312 ▲0.5%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="home-hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      🤖 <span data-i18n="aiPowered">AI-Powered Predictions · Live</span>
+    </div>
+    <h1 class="hero-title">
+      <span data-i18n="heroTitle1">Stock Market</span><br><span class="hero-accent" data-i18n="heroTitle2">Forecast</span>
+    </h1>
+    <p class="hero-sub" data-i18n="heroSub">AI-Powered 7-Day Market Intelligence</p>
+    <p class="hero-desc" data-i18n="heroDesc">Real-time AI forecasting across stocks, crypto, forex, indices &amp; commodities</p>
+
+    <div class="hero-credits-info" id="heroCreditsInfo">
+      <i class="fa fa-bolt"></i>
+      <span id="heroCreditsText">You have <strong>3000 free credits</strong> — Each prediction costs 100 credits</span>
+    </div>
+  </div>
+
+  <!-- Market Cards Grid -->
+  <div class="markets-grid" id="marketsGrid">
+
+    <div class="market-card" id="card-stocks" data-market="stocks" style="--card-color:#00f5a0;--card-delay:0s">
+      <div class="card-glow"></div>
+      <div class="card-shine"></div>
+      <div class="card-icon">
+        <svg width="38" height="38" viewBox="0 0 40 40" fill="none">
+          <polyline points="5,30 13,18 20,24 28,10 35,16" stroke="#00f5a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="28" cy="10" r="3" fill="#00f5a0" opacity="0.8"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <h3 class="card-title" data-i18n="stockMarket">Stock Market</h3>
+        <p class="card-desc">NSE · BSE · NYSE · NASDAQ</p>
+        <div class="card-tags"><span>TCS</span><span>RELIANCE</span><span>AAPL</span></div>
+      </div>
+      <div class="card-arrow"><i class="fa fa-arrow-right"></i></div>
+    </div>
+
+    <div class="market-card" id="card-crypto" data-market="crypto" style="--card-color:#f7931a;--card-delay:0.08s">
+      <div class="card-glow"></div>
+      <div class="card-shine"></div>
+      <div class="card-icon">
+        <svg width="38" height="38" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="14" stroke="#f7931a" stroke-width="2" fill="none"/>
+          <text x="20" y="26" text-anchor="middle" fill="#f7931a" font-size="14" font-weight="bold" font-family="sans-serif">₿</text>
+        </svg>
+      </div>
+      <div class="card-content">
+        <h3 class="card-title" data-i18n="cryptoMarket">Crypto Market</h3>
+        <p class="card-desc">Bitcoin · Ethereum · Altcoins</p>
+        <div class="card-tags"><span>BTC</span><span>ETH</span><span>SOL</span></div>
+      </div>
+      <div class="card-arrow"><i class="fa fa-arrow-right"></i></div>
+    </div>
+
+    <div class="market-card" id="card-forex" data-market="forex" style="--card-color:#7c6cf5;--card-delay:0.16s">
+      <div class="card-glow"></div>
+      <div class="card-shine"></div>
+      <div class="card-icon">
+        <svg width="38" height="38" viewBox="0 0 40 40" fill="none">
+          <circle cx="14" cy="20" r="9" stroke="#7c6cf5" stroke-width="2" fill="none"/>
+          <circle cx="26" cy="20" r="9" stroke="#7c6cf5" stroke-width="2" fill="none" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <h3 class="card-title" data-i18n="forexMarket">Forex Market</h3>
+        <p class="card-desc">Currency pairs · FX rates</p>
+        <div class="card-tags"><span>USD/INR</span><span>EUR/USD</span></div>
+      </div>
+      <div class="card-arrow"><i class="fa fa-arrow-right"></i></div>
+    </div>
+
+    <div class="market-card" id="card-indices" data-market="indices" style="--card-color:#00d9f5;--card-delay:0.24s">
+      <div class="card-glow"></div>
+      <div class="card-shine"></div>
+      <div class="card-icon">
+        <svg width="38" height="38" viewBox="0 0 40 40" fill="none">
+          <rect x="6"  y="22" width="6" height="10" rx="1" fill="#00d9f5" opacity="0.9"/>
+          <rect x="17" y="14" width="6" height="18" rx="1" fill="#00d9f5" opacity="0.9"/>
+          <rect x="28" y="8"  width="6" height="24" rx="1" fill="#00d9f5" opacity="0.9"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <h3 class="card-title" data-i18n="indicesMarket">Indices</h3>
+        <p class="card-desc">NIFTY · SENSEX · S&amp;P500</p>
+        <div class="card-tags"><span>NIFTY</span><span>SENSEX</span></div>
+      </div>
+      <div class="card-arrow"><i class="fa fa-arrow-right"></i></div>
+    </div>
+
+    <div class="market-card" id="card-commodities" data-market="commodities" style="--card-color:#ffd700;--card-delay:0.32s">
+      <div class="card-glow"></div>
+      <div class="card-shine"></div>
+      <div class="card-icon">
+        <svg width="38" height="38" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="12" fill="#ffd700" opacity="0.15"/>
+          <circle cx="20" cy="20" r="8"  fill="#ffd700" opacity="0.3"/>
+          <circle cx="20" cy="20" r="4"  fill="#ffd700"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <h3 class="card-title" data-i18n="commoditiesMarket">Commodities</h3>
+        <p class="card-desc">Gold · Silver · Crude · Gas</p>
+        <div class="card-tags"><span>GOLD</span><span>SILVER</span><span>CRUDE</span></div>
+      </div>
+      <div class="card-arrow"><i class="fa fa-arrow-right"></i></div>
+    </div>
+
+  </div><!-- /markets-grid -->
+
+  <!-- Stats strip -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <span class="stat-num" data-count="50000">0</span>+
+      <span class="stat-label" data-i18n="predictionsMade">Predictions Made</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num" data-count="92">0</span>%
+      <span class="stat-label" data-i18n="aiAccuracy">AI Accuracy</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num" data-count="5">0</span>
+      <span class="stat-label" data-i18n="marketsCovered">Markets Covered</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num" data-count="7">0</span>-Day
+      <span class="stat-label" data-i18n="forecastRange">Forecast Range</span>
+    </div>
+  </div>
+
+  <footer class="home-footer">
+    <p>Powered by <b>FinSight AI</b> · Real-time market intelligence · <span id="homeYear"></span></p>
+  </footer>
+
+</div><!-- /homePage -->
+
+
+<!-- =========================================================
+     PAGE 3 — DASHBOARD
+========================================================= -->
+<div id="dashboardPage" class="page">
+
+  <!-- Top Bar -->
+  <div class="top-bar glass-nav">
+    <div class="topbar-left">
+      <button id="backToHome" class="back-btn" type="button">
+        <i class="fa fa-arrow-left"></i> <span data-i18n="home">Home</span>
+      </button>
+      <span class="breadcrumb" id="breadcrumb">Stocks</span>
+    </div>
+
+    <div class="market-tabs" id="marketTabs">
+      <button class="mktab active" type="button" data-market="stocks">
+        <i class="fa fa-chart-line"></i> <span data-i18n="stocks">Stocks</span>
+      </button>
+      <button class="mktab" type="button" data-market="crypto">
+        <i class="fa fa-bitcoin"></i> <span data-i18n="crypto">Crypto</span>
+      </button>
+      <button class="mktab" type="button" data-market="forex">
+        <i class="fa fa-exchange-alt"></i> <span data-i18n="forex">Forex</span>
+      </button>
+      <button class="mktab" type="button" data-market="indices">
+        <i class="fa fa-bar-chart"></i> <span data-i18n="indices">Indices</span>
+      </button>
+      <button class="mktab" type="button" data-market="commodities">
+        <i class="fa fa-cubes"></i> <span data-i18n="commodities">Commodities</span>
+      </button>
+    </div>
+
+    <div class="topbar-right">
+      <!-- PROBLEM 3 FIX: Credits — Unlimited ♾ for paid plans -->
+      <div class="credits-badge" id="dashCreditsDisplay" title="Prediction credits remaining">
+        <i class="fa fa-bolt"></i>
+        <span id="dashCreditsCount">3000</span>
+        <span class="credits-label" data-i18n="credits">credits</span>
+      </div>
+      <div class="plan-badge" id="dashPlanBadge">FREE</div>
+      <button id="dashSubscribeBtn" class="btn-subscribe-nav" type="button">
+        <i class="fa fa-crown"></i> <span data-i18n="upgrade">Upgrade</span>
+      </button>
+      <!-- PROBLEM 1 FIX: Language selector — EN, Hindi, Marathi -->
+      <select id="languageSelector" class="nav-select">
+        <option value="en">🌐 EN</option>
+        <option value="hi">हिंदी</option>
+        <option value="mr">मराठी</option>
+      </select>
+      <button id="themeToggle" class="nav-icon-btn" type="button"><i class="fa fa-moon"></i></button>
+      <div class="user-avatar small" id="dashUserAvatar">U</div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 7 FIX: Compact live ticker -->
+  <div class="ticker-wrap compact">
+    <div class="ticker-track">
+      <div class="ticker-inner" id="dashTicker">
+        <span class="ticker-item up">BTC $67,240 ▲2.1%</span>
+        <span class="ticker-item up">NIFTY 24,560 ▲0.8%</span>
+        <span class="ticker-item down">EUR/USD 1.0821 ▼0.3%</span>
+        <span class="ticker-item up">GOLD $2,312 ▲0.5%</span>
+        <span class="ticker-item up">AAPL $192.5 ▲1.2%</span>
+        <span class="ticker-item down">ETH $3,240 ▼0.7%</span>
+        <span class="ticker-item up">BTC $67,240 ▲2.1%</span>
+        <span class="ticker-item up">NIFTY 24,560 ▲0.8%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="market-badge-pill">
+          <span class="badge-icon" id="badgeIcon">📈</span>
+          <span id="marketLabel">Stock Market</span>
+        </div>
+        <div>
+          <h1 id="titleText" class="dash-title">AI Stock Forecast</h1>
+          <p id="subtitleText" class="dash-subtitle" data-i18n="heroSub">AI-Powered 7-Day Market Intelligence</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          LIVE
+        </div>
+      </div>
+    </header>
+
+    <!-- Search Section — PROBLEM 4 FIX: Market-based symbol validation -->
+    <div class="search-panel glass-card">
+      <div class="search-wrap">
+        <i class="fa fa-search search-icon"></i>
+        <input type="text" id="symbolInput"
+               placeholder="Enter symbol (e.g., AAPL, TCS.NS, BTC-USD, EURUSD=X)"
+               autocomplete="off">
+        <div class="autocomplete-box" id="autocompleteBox"></div>
+        <button class="search-clear" id="searchClear" style="display:none">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      <button id="predictBtn" class="predict-btn" type="button">
+        <i class="fa fa-magic btn-icon"></i>
+        <span class="btn-text" data-i18n="predict">Predict</span>
+        <span class="btn-loader" style="display:none">
+          <i class="fa fa-spinner fa-spin"></i>
+        </span>
+        <span class="btn-cost">-100 <i class="fa fa-bolt"></i></span>
+      </button>
+      <button id="aiChatBtn" class="ai-chat-trigger-btn" type="button">
+        <i class="fa fa-robot"></i> <span data-i18n="aiChat">AI Chat</span>
+      </button>
+      <!-- PROBLEM 14 FIX: Community Predictions button beside AI Chat -->
+      <button id="communityBtn" class="community-trigger-btn" type="button">
+        <i class="fa fa-users"></i> <span data-i18n="community">Community</span>
+      </button>
+    </div>
+
+    <!-- Quick Chips -->
+    <div class="quick-chips" id="quickChips"></div>
+
+    <!-- PROBLEM 4 FIX: Market validation warning -->
+    <div id="marketValidationWarn" class="market-warn" style="display:none">
+      <i class="fa fa-exclamation-triangle"></i>
+      <span id="marketValidationMsg"></span>
+    </div>
+
+    <!-- Error -->
+    <div id="error" class="error-banner" style="display:none">
+      <i class="fa fa-exclamation-triangle"></i>
+      <span id="errorMsg"></span>
+    </div>
+
+    <!-- PROBLEM 8 FIX: Market Movers — hidden after prediction -->
+    <div id="marketMovers" class="movers-section fade-in-up">
+      <!-- Skeleton -->
+      <div class="movers-skeleton" id="moversSkeleton" style="display:none">
+        <div class="skeleton-card">
+          <div class="sk-line sk-title"></div>
+          <div class="sk-line"></div>
+          <div class="sk-line"></div>
+          <div class="sk-line"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="sk-line sk-title"></div>
+          <div class="sk-line"></div>
+          <div class="sk-line"></div>
+          <div class="sk-line"></div>
+        </div>
+      </div>
+
+      <!-- PROBLEM 5 FIX: Vertical auto-scroll list for gainers/losers -->
+      <div class="movers-grid" id="moversContent">
+        <div class="movers-panel gainers-panel">
+          <div class="movers-panel-header">
+            <div class="movers-panel-title">
+              <span class="movers-icon gainers-icon">📈</span>
+              <span id="topGainersTitle" data-i18n="gainers">Top Gainers</span>
+            </div>
+            <span class="movers-badge gainers-badge">LIVE</span>
+          </div>
+          <!-- PROBLEM 5 FIX: scroll-list class for auto-scroll -->
+          <div class="movers-list vertical scroll-list" id="gainersList">
+            <!-- JS will populate with auto-scroll items -->
+          </div>
+        </div>
+        <div class="movers-panel losers-panel">
+          <div class="movers-panel-header">
+            <div class="movers-panel-title">
+              <span class="movers-icon losers-icon">📉</span>
+              <span id="topLosersTitle" data-i18n="losers">Top Losers</span>
+            </div>
+            <span class="movers-badge losers-badge">LIVE</span>
+          </div>
+          <!-- PROBLEM 5 FIX: scroll-list class for auto-scroll -->
+          <div class="movers-list vertical scroll-list" id="losersList">
+            <!-- JS will populate with auto-scroll items -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         PREDICTION DASHBOARD — shown after predict
+    ===================================================== -->
+    <div id="predictionDashboard" class="prediction-dashboard" style="display:none">
+
+      <!-- Row 1: Signal Gauge + Metrics -->
+      <div class="pred-row-1">
+
+        <!-- PROBLEM 9 FIX: Signal Gauge with BUY/SELL/HOLD label above -->
+        <div class="gauge-panel glass-card" id="signalGaugeSection">
+          <div class="gauge-header">
+            <span class="gauge-ticker-label" id="gaugeTicker">—</span>
+            <span class="gauge-live-dot"></span>
+          </div>
+          <!-- PROBLEM 9 FIX: Signal name ABOVE gauge -->
+          <div class="signal-label-top" id="gaugeSignalLabel">—</div>
+          <div class="gauge-wrap">
+            <svg class="gauge-svg" viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background arc -->
+              <path d="M 20 110 A 90 90 0 0 1 200 110" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="18" stroke-linecap="round"/>
+              <!-- Sell zone (red) -->
+              <path d="M 20 110 A 90 90 0 0 1 80 32" fill="none" stroke="rgba(239,68,68,0.3)" stroke-width="18" stroke-linecap="round"/>
+              <!-- Hold zone (yellow) -->
+              <path d="M 80 32 A 90 90 0 0 1 140 32" fill="none" stroke="rgba(245,158,11,0.3)" stroke-width="18" stroke-linecap="round"/>
+              <!-- Buy zone (green) -->
+              <path d="M 140 32 A 90 90 0 0 1 200 110" fill="none" stroke="rgba(34,197,94,0.3)" stroke-width="18" stroke-linecap="round"/>
+              <!-- Active arc -->
+              <path id="gaugeArcActive" d="M 20 110 A 90 90 0 0 1 200 110" fill="none" stroke="url(#gaugeGrad)" stroke-width="18" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283" style="transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)"/>
+              <!-- Needle -->
+              <line id="gaugeNeedle" x1="110" y1="110" x2="110" y2="30" stroke="white" stroke-width="2.5" stroke-linecap="round" transform="rotate(0, 110, 110)" style="transition:transform 1.2s cubic-bezier(0.4,0,0.2,1)"/>
+              <circle cx="110" cy="110" r="6" fill="white"/>
+              <!-- Zone labels -->
+              <text x="18"  y="128" fill="rgba(239,68,68,0.8)"  font-size="9" font-family="Space Grotesk">SELL</text>
+              <text x="96"  y="18"  fill="rgba(245,158,11,0.8)" font-size="9" font-family="Space Grotesk">HOLD</text>
+              <text x="182" y="128" fill="rgba(34,197,94,0.8)"  font-size="9" font-family="Space Grotesk">BUY</text>
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ef4444"/>
+                  <stop offset="50%" stop-color="#f59e0b"/>
+                  <stop offset="100%" stop-color="#22c55e"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="gauge-center-info">
+              <div class="gauge-confidence" id="gaugeConfidence">—%</div>
+              <div class="gauge-conf-label" data-i18n="confidence">Confidence</div>
+            </div>
+          </div>
+          <!-- PROBLEM 9 FIX: Confidence % + Risk Level shown clearly -->
+          <div class="gauge-meta">
+            <div class="gauge-meta-item">
+              <span class="gm-label" data-i18n="riskLevel">Risk Level</span>
+              <span class="gm-val risk-val" id="gaugeRisk">—</span>
+            </div>
+            <div class="gauge-meta-item">
+              <span class="gm-label" data-i18n="aiSignal">AI Signal</span>
+              <span class="gm-val signal-val" id="gaugeSignalVal">—</span>
+            </div>
+            <div class="gauge-meta-item">
+              <span class="gm-label" data-i18n="accuracy">Accuracy</span>
+              <span class="gm-val" id="gaugeAccuracy">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metrics Row -->
+        <div class="metrics-stack">
+          <div class="metric-tile glass-card" id="latestClose">
+            <div class="metric-icon"><i class="fa fa-dollar-sign"></i></div>
+            <div class="metric-body">
+              <span class="metric-label" data-i18n="currentPrice">Current Price</span>
+              <span class="metric-val" id="latestCloseVal">—</span>
+            </div>
+          </div>
+          <div class="metric-tile glass-card" id="signalCardWrapper">
+            <div class="metric-icon signal-icon-wrap" id="signalIconWrap">
+              <i class="fa fa-signal"></i>
+            </div>
+            <div class="metric-body">
+              <span class="metric-label" data-i18n="aiSignal">AI Signal</span>
+              <span class="metric-val" id="signalCardVal">—</span>
+            </div>
+          </div>
+          <div class="metric-tile glass-card" id="accuracyCard">
+            <div class="metric-icon"><i class="fa fa-bullseye"></i></div>
+            <div class="metric-body">
+              <span class="metric-label" data-i18n="modelAccuracy">Model Accuracy</span>
+              <span class="metric-val" id="accuracyCardVal">—</span>
+            </div>
+          </div>
+          <div class="metric-tile glass-card" id="riskCard">
+            <div class="metric-icon"><i class="fa fa-shield-alt"></i></div>
+            <div class="metric-body">
+              <span class="metric-label" data-i18n="riskLevel">Risk Level</span>
+              <span class="metric-val" id="riskCardVal">—</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /pred-row-1 -->
+
+      <!-- PROBLEM 10 FIX: Next 7 Day Forecast Table -->
+      <div id="forecastSection" class="forecast-panel glass-card">
+        <div class="panel-header">
+          <h3 id="forecastTitle">
+            <i class="fa fa-calendar-alt"></i> <span data-i18n="forecast">Next 7 Days Forecast</span>
+          </h3>
+          <button class="forecast-export-btn" id="exportForecast" type="button" title="Export CSV">
+            <i class="fa fa-download"></i>
+          </button>
+        </div>
+        <div id="forecastSkeleton" class="forecast-skeleton" style="display:none">
+          <div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div>
+          <div class="sk-row"></div><div class="sk-row"></div>
+        </div>
+        <div id="forecastTableContainer" class="forecast-table-wrap">
+          <!-- Table injected by JS — PROBLEM 10 FIX -->
+        </div>
+      </div>
+
+      <!-- PROBLEM 11 & 12 FIX: Charts row -->
+      <div class="charts-row" id="chartSection">
+        <!-- PROBLEM 11 FIX: Advanced Prediction Chart with historical + dashed AI line -->
+        <div class="chart-panel glass-card">
+          <div class="chart-panel-header">
+            <h3 id="chartTitle">
+              <i class="fa fa-chart-area"></i> <span data-i18n="aiPredChart">AI Prediction Chart</span>
+            </h3>
+            <div class="chart-range-btns">
+              <button class="range-btn active" type="button" data-range="1mo">1M</button>
+              <button class="range-btn"        type="button" data-range="3mo">3M</button>
+              <button class="range-btn"        type="button" data-range="6mo">6M</button>
+              <button class="range-btn"        type="button" data-range="1y">1Y</button>
+            </div>
+          </div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-dot blue-dot"></span><span data-i18n="historical">Historical</span></span>
+            <span class="legend-item"><span class="legend-dot green-dot dashed-dot"></span><span data-i18n="aiForecast">AI Forecast</span></span>
+          </div>
+          <div id="plotlyChart" class="themed-chart"></div>
+        </div>
+
+        <!-- PROBLEM 12 FIX: Candlestick Chart TradingView style -->
+        <div class="chart-panel glass-card">
+          <div class="chart-panel-header">
+            <h3>
+              <i class="fa fa-chart-bar"></i> <span data-i18n="candlestick">Candlestick Chart</span>
+              <span class="tradingview-badge">TradingView Style</span>
+            </h3>
+            <div class="chart-range-btns" id="candleRangeBtns">
+              <button class="range-btn active" type="button" data-range="1mo">1M</button>
+              <button class="range-btn"        type="button" data-range="3mo">3M</button>
+              <button class="range-btn"        type="button" data-range="6mo">6M</button>
+              <button class="range-btn"        type="button" data-range="1y">1Y</button>
+            </div>
+          </div>
+          <div id="candlestickChart" class="themed-chart"></div>
+        </div>
+      </div>
+
+      <!-- PROBLEM 17 FIX: News section with clickable cards -->
+      <div id="newsSection" class="news-panel glass-card">
+        <div class="panel-header">
+          <h3 id="newsTitle">
+            <i class="fa fa-newspaper"></i> <span data-i18n="latestNews">Latest News</span>
+          </h3>
+          <button class="news-refresh-btn" id="refreshNews" type="button" title="Refresh news">
+            <i class="fa fa-sync-alt"></i>
+          </button>
+        </div>
+        <div id="newsContainer" class="news-grid">
+          <!-- PROBLEM 17 FIX: Clickable news cards injected by JS -->
+        </div>
+      </div>
+
+      <!-- PROBLEM 2 FIX: Premium Features Section — shown only for Pro/Premium users -->
+      <div id="premiumFeaturesSection" class="premium-features-section" style="display:none">
+
+        <!-- PROBLEM 15 FIX: Paper Trading Portfolio (Pro+) -->
+        <div id="paperTradingSection" class="paper-trading-panel glass-card" style="display:none">
+          <div class="panel-header">
+            <h3><i class="fa fa-chart-pie"></i> <span data-i18n="paperTrading">Paper Trading Portfolio</span>
+              <span class="pro-badge-inline">PRO</span>
+            </h3>
+            <button id="newTradeBtn" class="btn-new-trade" type="button">
+              <i class="fa fa-plus"></i> <span data-i18n="newTrade">New Trade</span>
+            </button>
+          </div>
+          <div class="paper-stats-row">
+            <div class="paper-stat-box">
+              <div class="paper-stat-label" data-i18n="virtualBalance">Virtual Balance</div>
+              <div class="paper-stat-val" id="virtualBalance">₹1,00,000</div>
+            </div>
+            <div class="paper-stat-box">
+              <div class="paper-stat-label" data-i18n="openPositions">Open Positions</div>
+              <div class="paper-stat-val" id="openPositionsCount">0</div>
+            </div>
+            <div class="paper-stat-box">
+              <div class="paper-stat-label" data-i18n="totalPnL">Total P&amp;L</div>
+              <div class="paper-stat-val" id="totalPnL">₹0.00</div>
+            </div>
+          </div>
+          <div id="positionsTable" class="positions-table-wrap">
+            <table class="positions-table">
+              <thead>
+                <tr>
+                  <th data-i18n="symbol">Symbol</th>
+                  <th data-i18n="type">Type</th>
+                  <th data-i18n="quantity">Qty</th>
+                  <th data-i18n="buyPrice">Buy Price</th>
+                  <th data-i18n="currentPrice">Current Price</th>
+                  <th data-i18n="pnl">P&amp;L</th>
+                  <th data-i18n="action">Action</th>
+                </tr>
+              </thead>
+              <tbody id="positionsBody">
+                <tr><td colspan="7" class="no-positions" data-i18n="noPositions">No open positions. Start a trade!</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- New Trade Form -->
+          <div id="newTradeForm" class="new-trade-form" style="display:none">
+            <div class="trade-form-row">
+              <select id="tradeType" class="trade-select">
+                <option value="buy">BUY</option>
+                <option value="sell">SELL</option>
+              </select>
+              <input type="number" id="tradeQty" class="trade-input" placeholder="Quantity" min="1" value="1">
+              <button id="executeTradeBtn" class="btn-execute-trade" type="button">
+                <i class="fa fa-check"></i> <span data-i18n="executeTrade">Execute Trade</span>
+              </button>
+              <button id="cancelTradeBtn" class="btn-cancel-trade" type="button">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROBLEM 2 FIX: Advanced AI Features (Premium only) -->
+        <div id="premiumAISection" class="premium-ai-panel glass-card" style="display:none">
+          <div class="panel-header">
+            <h3><i class="fa fa-gem"></i> <span data-i18n="advancedAI">Advanced AI Analysis</span>
+              <span class="premium-badge-inline">PREMIUM</span>
+            </h3>
+          </div>
+          <div class="premium-features-grid">
+            <div class="premium-feature-card" id="backtestingCard">
+              <div class="pf-icon"><i class="fa fa-history"></i></div>
+              <div class="pf-title" data-i18n="backtesting">Strategy Backtesting</div>
+              <div class="pf-desc" data-i18n="backtestingDesc">Test your strategy on historical data</div>
+              <button class="pf-btn" id="runBacktestBtn" type="button" data-i18n="runBacktest">Run Backtest</button>
+              <div id="backtestResult" class="backtest-result" style="display:none"></div>
+            </div>
+            <div class="premium-feature-card" id="riskAnalysisCard">
+              <div class="pf-icon"><i class="fa fa-shield-alt"></i></div>
+              <div class="pf-title" data-i18n="riskAnalysis">Risk Analysis</div>
+              <div class="pf-desc" data-i18n="riskAnalysisDesc">Detailed volatility and downside risk</div>
+              <div id="riskAnalysisData" class="risk-analysis-data">
+                <div class="risk-metric"><span>VaR (95%)</span><span id="varVal">—</span></div>
+                <div class="risk-metric"><span data-i18n="volatility">Volatility</span><span id="volVal">—</span></div>
+                <div class="risk-metric"><span data-i18n="maxDrawdown">Max Drawdown</span><span id="drawdownVal">—</span></div>
+                <div class="risk-metric"><span>Sharpe Ratio</span><span id="sharpeVal">—</span></div>
+              </div>
+            </div>
+            <div class="premium-feature-card" id="portfolioCard">
+              <div class="pf-icon"><i class="fa fa-briefcase"></i></div>
+              <div class="pf-title" data-i18n="portfolioAnalytics">Portfolio Analytics</div>
+              <div class="pf-desc" data-i18n="portfolioAnalyticsDesc">AI-powered portfolio performance insights</div>
+              <div id="portfolioInsights" class="portfolio-insights">
+                <div class="insight-item"><i class="fa fa-check-circle" style="color:var(--buy)"></i> <span data-i18n="diversification">Diversification Score</span>: <span id="divScore">—</span></div>
+                <div class="insight-item"><i class="fa fa-chart-pie" style="color:var(--secondary)"></i> <span data-i18n="sectorAlloc">Sector Allocation</span>: <span id="sectorAlloc">—</span></div>
+                <div class="insight-item"><i class="fa fa-star" style="color:var(--hold)"></i> <span data-i18n="aiRecommendation">AI Recommendation</span>: <span id="aiRec">—</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /premiumFeaturesSection -->
+
+    </div><!-- /predictionDashboard -->
+
+    <footer class="dash-footer">
+      <p id="footerText">Powered by <b>FinSight AI</b> · Multi-market intelligence</p>
+    </footer>
+
+  </div><!-- /dashboard -->
+</div><!-- /dashboardPage -->
+
+
+<!-- =========================================================
+     PAGE 4 — SUBSCRIPTION PAGE
+========================================================= -->
+<div id="subscriptionPage" class="page">
+  <nav class="home-nav glass-nav">
+    <div class="nav-logo">
+      <div class="logo-icon small">
+        <svg width="20" height="20" viewBox="0 0 36 36" fill="none">
+          <path d="M4 28L10 18L16 22L22 10L28 14L32 6" stroke="url(#lg3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs><linearGradient id="lg3" x1="4" y1="28" x2="32" y2="6" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00f5a0"/><stop offset="100%" stop-color="#00d9f5"/>
+          </linearGradient></defs>
+        </svg>
+      </div>
+      <span class="nav-brand">FinSight <b>AI</b></span>
+    </div>
+    <div class="nav-right">
+      <button id="backFromSubBtn" class="back-btn" type="button">
+        <i class="fa fa-arrow-left"></i> <span data-i18n="back">Back</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="sub-page-content">
+    <div class="sub-hero">
+      <div class="hero-badge"><i class="fa fa-crown"></i> <span data-i18n="upgradePlan">Upgrade Your Plan</span></div>
+      <h2 class="sub-title"><span data-i18n="choosePlan">Choose Your</span> <span class="hero-accent" data-i18n="plan">Plan</span></h2>
+      <p class="sub-desc" data-i18n="planDesc">Unlock advanced AI predictions, paper trading and more</p>
+    </div>
+
+    <!-- Credits display -->
+    <div class="credits-info-box glass-card">
+      <div class="cib-left">
+        <i class="fa fa-bolt cib-icon"></i>
+        <div>
+          <div class="cib-title" data-i18n="creditsRemaining">Credits Remaining</div>
+          <div class="cib-val" id="subPageCredits">3000</div>
+        </div>
+      </div>
+      <div class="cib-right">
+        <div class="cib-plan-label" data-i18n="currentPlan">Current Plan</div>
+        <div class="cib-plan" id="subPagePlan">FREE</div>
+      </div>
+    </div>
+
+    <!-- Plan Cards Grid -->
+    <div class="plans-grid">
+
+      <!-- FREE PLAN -->
+      <div class="plan-card glass-card" data-plan="free">
+        <div class="plan-header free-header">
+          <div class="plan-icon"><i class="fa fa-seedling"></i></div>
+          <div class="plan-badge-label" data-i18n="currentPlan">Current Plan</div>
+        </div>
+        <h3 class="plan-name" data-i18n="free">Free</h3>
+        <div class="plan-price">
+          <span class="price-amount">₹0</span>
+          <span class="price-period" data-i18n="forever">/ forever</span>
+        </div>
+        <ul class="plan-features">
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="starterCredits">3000 starter credits</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="creditPerPred">100 credits per prediction</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="basicAI">Basic AI signals</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="sevenDayForecast">7-day forecasts</span></li>
+          <li class="feat-lock"><i class="fa fa-lock"></i> <span data-i18n="paperTradingLocked">Paper Trading 🔒</span></li>
+          <li class="feat-lock"><i class="fa fa-lock"></i> <span data-i18n="advancedAILocked">Advanced AI 🔒</span></li>
+          <li class="feat-lock"><i class="fa fa-lock"></i> <span data-i18n="backtestingLocked">Backtesting 🔒</span></li>
+          <li class="feat-lock"><i class="fa fa-lock"></i> <span data-i18n="riskAnalysisLocked">Risk Analysis 🔒</span></li>
+        </ul>
+        <button class="plan-btn current-plan-btn" disabled data-i18n="currentPlanBtn">Current Plan</button>
+      </div>
+
+      <!-- PRO PLAN -->
+      <div class="plan-card glass-card popular-plan" data-plan="pro">
+        <div class="plan-header pro-header">
+          <div class="plan-icon"><i class="fa fa-rocket"></i></div>
+          <div class="plan-badge-label popular-badge">⭐ Most Popular</div>
+        </div>
+        <h3 class="plan-name">Pro</h3>
+        <div class="plan-price">
+          <span class="price-amount">₹199</span>
+          <span class="price-period">/ month</span>
+        </div>
+        <ul class="plan-features">
+          <li class="feat-ok"><i class="fa fa-check"></i> <strong data-i18n="unlimitedPred">Unlimited predictions</strong></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="paperTradingUnlock">Paper Trading unlocked</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="virtualBalance1L">Virtual balance ₹1,00,000</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="realTimePL">Real-time P&amp;L simulation</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="priorityAI">Priority AI signals</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="allMarkets">All 5 markets</span></li>
+          <li class="feat-lock"><i class="fa fa-lock"></i> <span data-i18n="backtestingLocked">Strategy Backtesting 🔒</span></li>
+          <li class="feat-lock"><i class="fa fa-lock"></i> <span data-i18n="aiConfLocked">AI Confidence Analysis 🔒</span></li>
+        </ul>
+        <button class="plan-btn pro-plan-btn" data-plan-type="pro" data-price="199">
+          <i class="fa fa-crown"></i> Subscribe ₹199
+        </button>
+      </div>
+
+      <!-- PREMIUM PLAN -->
+      <div class="plan-card glass-card premium-plan" data-plan="premium">
+        <div class="plan-header premium-header">
+          <div class="plan-icon"><i class="fa fa-gem"></i></div>
+          <div class="plan-badge-label premium-badge">💎 Best Value</div>
+        </div>
+        <h3 class="plan-name">Premium</h3>
+        <div class="plan-price">
+          <span class="price-amount">₹499</span>
+          <span class="price-period">/ month</span>
+        </div>
+        <ul class="plan-features">
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="everythingPro">Everything in Pro</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <strong data-i18n="advancedAIPred">Advanced AI predictions</strong></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="strategyBacktest">Strategy Backtesting</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="aiConfAnalysis">AI Confidence Analysis</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="riskAnalysis">Risk Analysis</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="portfolioInsightsLabel">Portfolio Insights</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="exportReports">Export reports</span></li>
+          <li class="feat-ok"><i class="fa fa-check"></i> <span data-i18n="prioritySupport">Priority support</span></li>
+        </ul>
+        <button class="plan-btn premium-plan-btn" data-plan-type="premium" data-price="499">
+          <i class="fa fa-gem"></i> Subscribe ₹499
+        </button>
+      </div>
+
+    </div><!-- /plans-grid -->
+  </div>
+</div><!-- /subscriptionPage -->
+
+
+<!-- =========================================================
+     DEMO PAYMENT MODAL
+========================================================= -->
+<div id="paymentModal" class="modal-overlay" style="display:none">
+  <div class="payment-modal glass-card">
+    <div class="payment-modal-header">
+      <div class="payment-logo">
+        <i class="fa fa-shield-alt"></i> Demo Payment
+      </div>
+      <button id="closePaymentModal" class="close-btn" type="button"><i class="fa fa-times"></i></button>
+    </div>
+
+    <div class="payment-amount-display">
+      <div class="payment-icon-wrap" id="paymentPlanIcon">
+        <i class="fa fa-rocket"></i>
+      </div>
+      <div class="payment-plan-name" id="paymentPlanName">Pro Plan</div>
+      <div class="payment-price-big" id="paymentPrice">₹199</div>
+      <div class="payment-per">per month · Billed monthly</div>
+    </div>
+
+    <div class="fake-payment-box">
+      <div class="fake-qr">
+        <div class="qr-inner">
+          <div class="qr-logo"><i class="fa fa-qrcode"></i></div>
+          <p class="qr-text">Demo QR Code</p>
+        </div>
+      </div>
+      <div class="payment-instructions">
+        <div class="pay-step"><span class="step-num">1</span> This is a <strong>demo payment</strong> for college project</div>
+        <div class="pay-step"><span class="step-num">2</span> No real money will be deducted</div>
+        <div class="pay-step"><span class="step-num">3</span> Click "I Have Paid" to activate plan instantly</div>
+      </div>
+    </div>
+
+    <div class="payment-actions">
+      <button id="iHavePaidBtn" class="btn-paid" type="button">
+        <i class="fa fa-check-circle"></i> I Have Paid — Activate Plan
+      </button>
+      <button id="cancelPaymentBtn" class="btn-cancel-payment" type="button">
+        Cancel
+      </button>
+    </div>
+
+    <div class="payment-secure-note">
+      <i class="fa fa-lock"></i> Demo project — No real payment processed
+    </div>
+  </div>
+</div>
+
+
+<!-- =========================================================
+     CREDITS EXHAUSTED MODAL
+========================================================= -->
+<div id="creditsModal" class="modal-overlay" style="display:none">
+  <div class="credits-modal glass-card">
+    <div class="credits-modal-icon">
+      <i class="fa fa-bolt"></i>
+    </div>
+    <h3 class="credits-modal-title" data-i18n="creditsExhausted">Credits Exhausted!</h3>
+    <p class="credits-modal-desc" data-i18n="creditsExhaustedDesc">
+      Your credits are finished. Please subscribe to continue making predictions.
+    </p>
+    <div class="credits-modal-actions">
+      <button id="goToSubscribeBtn" class="btn-primary">
+        <i class="fa fa-crown"></i> <span data-i18n="viewPlans">View Plans</span>
+      </button>
+      <button id="closeCreditsModal" class="btn-secondary" data-i18n="later">
+        Later
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- =========================================================
+     AI CHATBOT MODAL — PROBLEM 13 FIX
+========================================================= -->
+<div id="aiChatModal" class="ai-modal-overlay" style="display:none">
+  <div class="ai-chat-box glass-card">
+    <div class="ai-header">
+      <div class="ai-header-left">
+        <div class="ai-avatar-wrap">
+          <div class="ai-avatar-ring"></div>
+          <div class="ai-avatar">🤖</div>
+        </div>
+        <div>
+          <div id="aiHeaderText" class="ai-header-title" data-i18n="aiAssistant">FinSight AI Assistant</div>
+          <div class="ai-status"><span class="status-dot"></span> <span data-i18n="ollamaStatus">Online · Powered by Ollama</span></div>
+        </div>
+      </div>
+      <div class="ai-header-actions">
+        <button id="clearChatBtn" class="ai-icon-btn" title="Clear chat">
+          <i class="fa fa-trash"></i>
+        </button>
+        <button id="closeAiChat" class="ai-icon-btn" title="Close">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- PROBLEM 13 FIX: Context bar shows symbol + signal -->
+    <div class="ai-context-bar" id="aiContextBar" style="display:none">
+      <span class="ctx-label"><i class="fa fa-info-circle"></i> <span data-i18n="context">Context:</span></span>
+      <span id="aiContextPill" class="ctx-pill"></span>
+    </div>
+
+    <!-- Messages -->
+    <div id="aiChatMessages" class="ai-messages">
+      <div class="ai-msg ai" id="aiWelcomeText">
+        <div class="ai-msg-avatar">🤖</div>
+        <div class="ai-msg-bubble">
+          👋 Hello! I'm your <strong>FinSight AI</strong> market analyst.<br><br>
+          I can help you with:<br>
+          • BUY / SELL / HOLD signals<br>
+          • Price forecast analysis<br>
+          • Risk assessment<br>
+          • Market news insights<br><br>
+          <em>First predict a stock, then ask me about it!</em>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick prompts -->
+    <div class="ai-quick-prompts" id="aiQuickPrompts">
+      <button class="quick-prompt" type="button" data-prompt="Why is this showing BUY signal?">
+        <i class="fa fa-question-circle"></i> Why BUY?
+      </button>
+      <button class="quick-prompt" type="button" data-prompt="What is the risk level and should I be cautious?">
+        <i class="fa fa-shield-alt"></i> Risk level?
+      </button>
+      <button class="quick-prompt" type="button" data-prompt="Explain the 7-day forecast trend in detail">
+        <i class="fa fa-chart-line"></i> Forecast trend?
+      </button>
+      <button class="quick-prompt" type="button" data-prompt="Should I invest now based on current signals?">
+        <i class="fa fa-coins"></i> Invest now?
+      </button>
+    </div>
+
+    <!-- Input -->
+    <div class="ai-input-row">
+      <input type="text" id="aiUserInput" placeholder="Ask about any market, signal, risk...">
+      <button id="aiSendBtn" class="ai-send-btn" type="button">
+        <i class="fa fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- =========================================================
+     COMMUNITY PREDICTIONS MODAL — PROBLEM 14 FIX
+========================================================= -->
+<div id="communityModal" class="ai-modal-overlay" style="display:none">
+  <div class="community-box glass-card">
+    <div class="community-header">
+      <div class="community-header-left">
+        <div class="community-icon-wrap">👥</div>
+        <div>
+          <div class="community-title" data-i18n="communityPredictions">Community Predictions</div>
+          <div class="community-subtitle" data-i18n="communitySubtitle">Share & discuss market signals</div>
+        </div>
+      </div>
+      <button id="closeCommunity" class="ai-icon-btn" title="Close">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Post New Prediction -->
+    <div class="community-post-form glass-card">
+      <div class="post-form-title"><i class="fa fa-plus-circle"></i> <span data-i18n="postPrediction">Post Your Prediction</span></div>
+      <div class="post-form-row">
+        <input type="text" id="postSymbol" class="post-input" placeholder="Symbol (e.g. RELIANCE)" maxlength="20">
+        <select id="postSignal" class="post-select">
+          <option value="BUY">📈 BUY</option>
+          <option value="SELL">📉 SELL</option>
+          <option value="HOLD">⚖️ HOLD</option>
+        </select>
+        <input type="text" id="postTarget" class="post-input" placeholder="Target (e.g. ₹2800)" maxlength="20">
+      </div>
+      <textarea id="postReason" class="post-textarea" placeholder="Your analysis reason..." maxlength="200" rows="2"></textarea>
+      <button id="submitPostBtn" class="btn-submit-post" type="button">
+        <i class="fa fa-paper-plane"></i> <span data-i18n="postIt">Post Prediction</span>
+      </button>
+    </div>
+
+    <!-- Community Feed -->
+    <div id="communityFeed" class="community-feed">
+      <!-- Posts injected by JS — PROBLEM 14 FIX -->
+      <div class="community-loading">
+        <i class="fa fa-spinner fa-spin"></i> <span data-i18n="loadingPosts">Loading community posts...</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- =========================================================
+     EMAIL ALERT NOTIFICATION BANNER — PROBLEM 16 FIX
+========================================================= -->
+<div id="emailAlertBanner" class="email-alert-banner" style="display:none">
+  <div class="email-alert-inner">
+    <i class="fa fa-envelope"></i>
+    <span id="emailAlertMsg">Trade alert sent!</span>
+    <button id="closeEmailAlert" class="email-alert-close"><i class="fa fa-times"></i></button>
+  </div>
+</div>
+
+
+<!-- =========================================================
+     PAGE LOADER
+========================================================= -->
+<div id="pageLoader" class="page-loader" style="display:none">
+  <div class="loader-inner">
+    <svg class="loader-logo" width="48" height="48" viewBox="0 0 36 36" fill="none">
+      <path d="M4 28L10 18L16 22L22 10L28 14L32 6" stroke="url(#lgLoader)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs><linearGradient id="lgLoader" x1="4" y1="28" x2="32" y2="6" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#00f5a0"/>
+        <stop offset="100%" stop-color="#00d9f5"/>
+      </linearGradient></defs>
+    </svg>
+    <div class="loader-ring"></div>
+    <p class="loader-text" data-i18n="loadingMarket">Loading market data...</p>
+    <div class="loader-progress">
+      <div class="loader-bar" id="loaderBar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- Scripts -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
