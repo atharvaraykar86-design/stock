@@ -1,0 +1,7 @@
+Flask
+yfinance
+pandas
+numpy
+statsmodels
+plotly
+feedparser
