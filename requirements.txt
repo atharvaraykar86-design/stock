@@ -1,7 +1,8 @@
-Flask
+flask
 yfinance
 pandas
 numpy
 statsmodels
 plotly
 feedparser
+gunicorn
